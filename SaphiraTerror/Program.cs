@@ -1,4 +1,10 @@
+using Microsoft.EntityFrameworkCore;
+using SaphiraTerror.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+//base de dados
+builder.Services.AddDbContext<SaphiraTerrorDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

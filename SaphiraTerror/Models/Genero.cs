@@ -11,7 +11,7 @@ namespace SaphiraTerror.Models
         [Required(ErrorMessage = "Campo obrigatório!")]
         [Display(Name = "Gênero")]
         [StringLength(150)]
-        public int DescricaoGenero { get; set; }
+        public string DescricaoGenero { get; set; }
         public List<Filme> Filmes { get; set; } = new List<Filme>();
     }
 }
