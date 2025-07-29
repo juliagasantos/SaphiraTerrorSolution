@@ -14,7 +14,7 @@ namespace SaphiraTerror.Data
         }
         //DbSet representam as tabelas
         public DbSet<Filme> Filmes { get; set; }
-        public DbSet<Genero> Generos { get; set; }
+        public DbSet<Genero> Classificacao { get; set; }
         public DbSet<Classificacao> Classificacoes { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<TipoUsuario> TipoUsuarios { get; set; }
