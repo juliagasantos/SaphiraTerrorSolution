@@ -1,0 +1,53 @@
+﻿@model IEnumerable<SaphiraTerror.Models.TipoUsuario>
+
+@{
+    ViewData["Title"] = "Classificações";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    @if (User.IsInRole("Administrador") || User.IsInRole("Gerente"))
+    {
+        // Exibe o botão "Novo Filme" somente para usuários que têm o papel
+                // "Administrador" ou "Gerente".
+        <a asp-action="Create" class="btn btn-success">Tipo de Usuario</a>
+    }
+</p>
+
+
+<!-- Tabela para exibição dos filmes -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Descricao</th>
+            @if (User.IsInRole("Administrador") || User.IsInRole("Gerente"))
+            {
+                <th>Ações</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            // Loop para cada filme da lista (Model).
+            <tr>
+                <td>@item.DescricaoTipoUsuario</td>
+
+                <td>
+                    @if (User.IsInRole("Administrador") || User.IsInRole("Gerente"))
+                    {
+                        // Botão Editar aparece para Admin e Gerente.
+                        <a asp-action="Edit" asp-route-id="@item.IdTipoUsuario" class="btn btn-primary btn-sm">Editar</a>
+                    }
+
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        // Botão Excluir aparece somente para Admin.
+                        <a asp-action="Delete" asp-route-id="@item.IdTipoUsuario" class="btn btn-danger btn-sm">Excluir</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

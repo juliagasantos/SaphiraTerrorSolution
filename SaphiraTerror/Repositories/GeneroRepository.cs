@@ -9,38 +9,45 @@ namespace SaphiraTerror.Repositories
     {
         //campo de apoio
         private readonly SaphiraTerrorDbContext _context;
-
         //injeção de dependência no construtor
         public GeneroRepository(SaphiraTerrorDbContext context)
         {
             _context = context;
         }
 
-        public Task AddAsync(Genero genero)
+
+        public async Task AddAsync(Genero genero)
         {
-            throw new NotImplementedException();
+            await _context.Generos.AddAsync(genero);
+            await _context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var genero = await _context.Generos.FirstOrDefaultAsync(g => g.IdGenero == id);
+            if (genero != null)
+            {
+                _context.Generos.Remove(genero);
+                await _context.SaveChangesAsync();
+            }
         }
 
         //todos os generos
         public async Task<List<Genero>> GetAllAsync()
         {
-            return await _context.Classificacao.ToListAsync();
+            return await _context.Generos.Include(g => g.Filmes).ToListAsync();
         }
 
         
-        public Task<Genero> GetByIdAsync(int id)
+        public async Task<Genero> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Generos.Include(g => g.Filmes).FirstOrDefaultAsync(g => g.IdGenero == id);
         }
 
-        public Task UpdateAsync(Genero genero)
+        public async Task UpdateAsync(Genero genero)
         {
-            throw new NotImplementedException();
+            _context.Generos.Update(genero);
+            await _context.SaveChangesAsync();
         }
     }
 }

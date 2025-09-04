@@ -11,40 +11,51 @@ namespace SaphiraTerror.Controllers
 {
     public class UsuarioController : Controller
     {
+        //homeController
+        //campo de apoio
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly ITipoUsuarioRepository _tipoUsuarioRepository;
 
+
+        //construtor
         public UsuarioController(IUsuarioRepository usuarioRepository, ITipoUsuarioRepository tipoUsuarioRepository)
         {
             _usuarioRepository = usuarioRepository;
             _tipoUsuarioRepository = tipoUsuarioRepository;
         }
 
+
         //index
         [Authorize(Roles = "Administrador,Gerente,Outros")]
         public async Task<IActionResult> Index(int? tipoUsuarioId, string? search)
-
         {
             var usuarios = await _usuarioRepository.GetAllAtivosAsync();
+
             if (tipoUsuarioId.HasValue && tipoUsuarioId.Value > 0)
                 usuarios = usuarios.Where(u => u.TipoUsuarioId == tipoUsuarioId).ToList();
 
             if (!string.IsNullOrEmpty(search))
                 usuarios = usuarios.Where(u => u.Nome.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
 
-            usuarios = usuarios.OrderByDescending(u => u.Nome).ToList();
+            usuarios = usuarios.OrderByDescending(u => u.IdUsuario).ToList();
 
-            ViewBag.TipoUsuario = new SelectList(await _tipoUsuarioRepository.GetAllAsync(), "IdTipoUsuario", "DescricaoTipoUsuario");
+            ViewBag.TiposUsuario = new SelectList(await _tipoUsuarioRepository.GetAllAsync(), "IdTipoUsuario", "DescricaoTipoUsuario");
             ViewBag.FiltroTipoId = tipoUsuarioId;
-            ViewBag.Search = search;
-            return View(usuarios);
+            ViewBag.TermoBusca = search;
 
+            return View(usuarios);
         }
+
+
+
+
+
+
 
         //login
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Login()
+        public IActionResult Login()
         {
             return View();
         }
@@ -57,15 +68,17 @@ namespace SaphiraTerror.Controllers
             var usuario = await _usuarioRepository.ValidarLoginAsync(email, senha);
             if (usuario == null || !usuario.Ativo)
             {
-                ModelState.AddModelError("", "Usuário ou senha inválidos!");
+                ModelState.AddModelError("", "Usuário ou senha inválidos.");
                 return View();
             }
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, usuario.Nome),
                 new Claim(ClaimTypes.Email, usuario.Email),
                 new Claim(ClaimTypes.Role, usuario.TipoUsuario.DescricaoTipoUsuario)
             };
+
             var identity = new ClaimsIdentity(claims, "SaphiraAuth");
             var principal = new ClaimsPrincipal(identity);
 
@@ -73,6 +86,7 @@ namespace SaphiraTerror.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
         //logout
         [AllowAnonymous]
         public async Task<IActionResult> Logout()
@@ -80,25 +94,19 @@ namespace SaphiraTerror.Controllers
             await HttpContext.SignOutAsync("SaphiraAuth");
             return RedirectToAction("Login");
         }
-
         //acesso negado
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> AcessoNegado()
+        public IActionResult AcessoNegado()
         {
             return View();
         }
 
-        //create
-        [Authorize(Roles = "Administrador,Gerente")]
-        public async Task<IActionResult> Create()
-        {
-            var viewModel = await CriarUsuarioViewModel();
 
-            return View(viewModel);
-        }
 
-        //criar usuario view model
+
+
+        //metodo de apoio
         private async Task<UsuarioViewModel> CriarUsuarioViewModel(UsuarioViewModel? model = null)
         {
             var tipos = await _tipoUsuarioRepository.GetAllAsync();
@@ -118,7 +126,16 @@ namespace SaphiraTerror.Controllers
             };
         }
 
+
+
         //create
+        [Authorize(Roles = "Administrador,Gerente")]
+        public async Task<IActionResult> Create()
+        {
+            var viewModel = await CriarUsuarioViewModel();
+            return View(viewModel);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(UsuarioViewModel viewModel)
@@ -134,27 +151,28 @@ namespace SaphiraTerror.Controllers
                     TipoUsuarioId = viewModel.TipoUsuarioId,
                     Ativo = true
                 };
+
                 await _usuarioRepository.AddAsync(usuario);
                 return RedirectToAction(nameof(Index));
             }
-            viewModel = await CriarUsuarioViewModel();
+
+            viewModel = await CriarUsuarioViewModel(viewModel);
             return View(viewModel);
         }
 
-        //edit
+        //Edit
         [Authorize(Roles = "Administrador,Gerente")]
         public async Task<IActionResult> Edit(int id)
         {
             var usuario = await _usuarioRepository.GetByIdAsync(id);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
+            if (usuario == null) return NotFound();
+
             var viewModel = new UsuarioViewModel
             {
                 IdUsuario = usuario.IdUsuario,
                 Nome = usuario.Nome,
                 Email = usuario.Email,
+                Senha = usuario.Senha,
                 DataNascimento = usuario.DataNascimento,
                 TipoUsuarioId = usuario.TipoUsuarioId,
                 TiposUsuario = (await _tipoUsuarioRepository.GetAllAsync()).Select(t => new SelectListItem
@@ -163,26 +181,30 @@ namespace SaphiraTerror.Controllers
                     Text = t.DescricaoTipoUsuario
                 })
             };
+
             return View(viewModel);
         }
 
-        //edit
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, UsuarioViewModel viewModel)
         {
             if (id != viewModel.IdUsuario)
-                return NotFound("Não encontrado!");
+                return NotFound();
+
             if (ModelState.IsValid)
             {
                 var usuario = await _usuarioRepository.GetByIdAsync(id);
                 if (usuario == null)
                     return NotFound();
+
                 usuario.Nome = viewModel.Nome;
                 usuario.Email = viewModel.Email;
                 usuario.Senha = viewModel.Senha;
                 usuario.DataNascimento = viewModel.DataNascimento;
                 usuario.TipoUsuarioId = viewModel.TipoUsuarioId;
+
                 await _usuarioRepository.UpdateAsync(usuario);
                 return RedirectToAction(nameof(Index));
             }
@@ -191,43 +213,52 @@ namespace SaphiraTerror.Controllers
             return View(viewModel);
         }
 
+
         //delete
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(int id)
         {
             var usuario = await _usuarioRepository.GetByIdAsync(id);
+            if (usuario == null)
+                return NotFound();
+
             return View(usuario);
         }
 
-        //softdelete
         [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> SoftDelete(int id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _usuarioRepository.InativarAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        //listar usuarios inativos
+        //inativos
         [Authorize(Roles = "Administrador")]
-        public async Task<IActionResult> GetAllInativos()
+        public async Task<IActionResult> Inativos()
         {
             var usuarios = await _usuarioRepository.GetAllAsync();
-            var inativos = usuarios.Where(u => !u.Ativo).OrderByDescending(u => u.IdUsuario).ToList();
+            var inativos = usuarios
+                .Where(u => !u.Ativo)
+                .OrderByDescending(u => u.IdUsuario)
+                .ToList();
 
             return View(inativos);
         }
 
-        //ativar usuario
+
+        //reativar
         [Authorize(Roles = "Administrador")]
-        public async Task<IActionResult> AtivarUsuario(int id)
+        public async Task<IActionResult> Ativar(int id)
         {
             var usuario = await _usuarioRepository.GetByIdAsync(id);
-            if (usuario == null)
-                return NotFound();
+            if (usuario == null) return NotFound();
 
             usuario.Ativo = true;
             await _usuarioRepository.UpdateAsync(usuario);
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction(nameof(Inativos));
         }
+
     }
 }

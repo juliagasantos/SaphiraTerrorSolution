@@ -1,0 +1,24 @@
+﻿@model SaphiraTerror.ViewModels.TipoUsuarioViewModel
+
+@{
+    ViewData["Title"] = "Editar Classificação";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="IdTipoUsuario" />
+
+    <div class="mb-3">
+        <label asp-for="DescricaoTipoUsuario" class="form-label"></label>
+        <input asp-for="DescricaoTipoUsuario" class="form-control" />
+        <span asp-validation-for="DescricaoTipoUsuario" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

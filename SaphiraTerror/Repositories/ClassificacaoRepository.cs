@@ -7,23 +7,27 @@ namespace SaphiraTerror.Repositories
 {
     public class ClassificacaoRepository : IClassificacaoRepository
     {
-        //campo de apoio
         private readonly SaphiraTerrorDbContext _context;
-        //injeção de dependência no construtor
         public ClassificacaoRepository(SaphiraTerrorDbContext context)
         {
             _context = context;
         }
 
-        
-        public Task AddAsync(Classificacao classificacao)
+
+        public async Task AddAsync(Classificacao classificacao)
         {
-            throw new NotImplementedException();
+            await _context.Classificacoes.AddAsync(classificacao);
+            await _context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var classificacao = await _context.Classificacoes.FirstOrDefaultAsync(f => f.IdClassificacao == id);
+            if (classificacao != null)
+            {
+                _context.Classificacoes.Remove(classificacao);
+                await _context.SaveChangesAsync();
+            }
         }
         //listar todas as classificações
         public async Task<List<Classificacao>> GetAllAsync()
@@ -31,14 +35,15 @@ namespace SaphiraTerror.Repositories
             return await _context.Classificacoes.ToListAsync();
         }
 
-        public Task<Classificacao> GetByIdAsync(int id)
+        public async Task<Classificacao> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Classificacoes.Include(c => c.Filmes).FirstOrDefaultAsync(c => c.IdClassificacao == id);
         }
 
-        public Task UpdateAsync(Classificacao classificacao)
+        public async Task UpdateAsync(Classificacao classificacao)
         {
-            throw new NotImplementedException();
+            _context.Classificacoes.Update(classificacao);
+            await _context.SaveChangesAsync();
         }
     }
 }
