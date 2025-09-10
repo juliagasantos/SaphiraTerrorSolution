@@ -46,6 +46,16 @@ namespace SaphiraTerror.Repositories
             return await _context.Filmes.Include(f => f.Genero).Include(f => f.Classificacao).FirstOrDefaultAsync(f => f.IdFilme == id);
         }
 
+        public async Task<List<Filme>> GetByIdGeneroAsync(int idGenero)
+        {
+            return await _context.Filmes.Include(f => f.Genero).Include(f => f.Classificacao).Where(f => f.GeneroId == idGenero).ToListAsync();
+        }
+
+        // public async Task<Filme> GetByIdTituloAsync(int idTitulo)
+        //{
+        //   throw new NotImplementedException();
+        // }
+
         //editar filme
         public async Task UpdateAsync(Filme filme)
         {

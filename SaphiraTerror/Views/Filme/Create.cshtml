@@ -1,4 +1,4 @@
-﻿@model Salvation.ViewModels.FilmeViewModel
+﻿@model SaphiraTerror.ViewModels.FilmeViewModel
 // Define que esta View vai receber um objeto do tipo FilmeViewModel.
 // Esse ViewModel contém os dados necessários para criar um filme
 // (título, produtora, imagem, classificação, gênero, etc).
@@ -16,17 +16,17 @@
     // "enctype=multipart/form-data" é obrigatório quando há upload de arquivos.
 
     <div class="mb-3">
-        <label asp-for="TituloFilme" class="form-label"></label>
-        <input asp-for="TituloFilme" class="form-control" />
-        <span asp-validation-for="TituloFilme" class="text-danger"></span>
+        <label asp-for="TituloFilmeViewModel" class="form-label"></label>
+        <input asp-for="TituloFilmeViewModel" class="form-control" />
+        <span asp-validation-for="TituloFilmeViewModel" class="text-danger"></span>
         // "asp-for" conecta o input diretamente à propriedade do ViewModel.
         // O "span asp-validation-for" exibe mensagens de erro da validação.
     </div>
 
     <div class="mb-3">
-        <label asp-for="ProdutoraFilme" class="form-label"></label>
-        <input asp-for="ProdutoraFilme" class="form-control" />
-        <span asp-validation-for="ProdutoraFilme" class="text-danger"></span>
+        <label asp-for="ProdutoraFilmeViewModel" class="form-label"></label>
+        <input asp-for="ProdutoraFilmeViewModel" class="form-control" />
+        <span asp-validation-for="ProdutoraFilmeViewModel" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
@@ -36,21 +36,21 @@
     </div>
 
     <div class="mb-3">
-        <label asp-for="ClassificacaoId" class="form-label"></label>
-        <select asp-for="ClassificacaoId" asp-items="Model.Classificacoes" class="form-select">
+        <label asp-for="ClassificacaoIdFilmeViewModel" class="form-label"></label>
+        <select asp-for="ClassificacaoIdFilmeViewModel" asp-items="Model.Classificacoes" class="form-select">
             <option value="">Selecione</option>
         </select>
-        <span asp-validation-for="ClassificacaoId" class="text-danger"></span>
+        <span asp-validation-for="ClassificacaoIdFilmeViewModel" class="text-danger"></span>
         // Dropdown (combo) de classificações. O "asp-items" carrega a lista
         // vinda do ViewModel (IEnumerable<SelectListItem>).
     </div>
 
     <div class="mb-3">
-        <label asp-for="GeneroId" class="form-label"></label>
-        <select asp-for="GeneroId" asp-items="Model.Generos" class="form-select">
+        <label asp-for="GeneroIdFilmeViewModel" class="form-label"></label>
+        <select asp-for="GeneroIdFilmeViewModel" asp-items="Model.Generos" class="form-select">
             <option value="">Selecione</option>
         </select>
-        <span asp-validation-for="GeneroId" class="text-danger"></span>
+        <span asp-validation-for="GeneroIdFilmeViewModel" class="text-danger"></span>
         // Dropdown de gêneros, mesmo funcionamento do anterior.
     </div>
 
