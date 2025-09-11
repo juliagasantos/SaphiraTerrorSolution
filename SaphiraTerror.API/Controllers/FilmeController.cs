@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SaphiraTerror.API.DTOs;
 using SaphiraTerror.Interfaces;
@@ -6,6 +7,7 @@ using SaphiraTerror.Interfaces;
 namespace SaphiraTerror.API.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("MyPolicy")]
     [ApiController]
     public class FilmeController : ControllerBase
     {

@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using SaphiraTerror.API.DTOs;
 using SaphiraTerror.Interfaces;
-using SaphiraTerror.Models;
 
 namespace SaphiraTerror.API.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("MyPolicy")]
     [ApiController]
     public class GeneroController : ControllerBase
     {
@@ -25,10 +25,11 @@ namespace SaphiraTerror.API.Controllers
             var resultado = new List<GeneroOutputDTO>();
             foreach (var genero in generos)
             {
-               resultado.Add(new GeneroOutputDTO {
-                   IdGenero = genero.IdGenero,
-                   Descricao = genero.DescricaoGenero
-               });
+                resultado.Add(new GeneroOutputDTO
+                {
+                    IdGenero = genero.IdGenero,
+                    Descricao = genero.DescricaoGenero
+                });
             }
             return Ok(resultado);
         }

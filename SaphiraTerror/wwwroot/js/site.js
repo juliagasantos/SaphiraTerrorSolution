@@ -6,37 +6,45 @@
 
 $(document).ready(function () {
     //urlBase da API
-    urlBase = "http://localhost:5274/api"
+    const urlBase = "http://localhost:5118/api"
 
     
     console.log('Chamando a API');
 
     //consumindo a API usando AJAX
     $.ajax({
-        type: "GET",
         url: urlBase + "/Genero", //endpoint
         type: "GET", //metodo http
         contentType: "application/json",
 
         //se der sucesso (200) cai aqui nesse bloco
         success: function (dados) {
-            console.log('Deu sucesso!');
 
-            // //percorrendo a lista de categorias
-            //$.each(data, function (i, item) {
-                //adicionando as categorias no select
-                //$('#category').append($('<option>', {
-                   // value: item.id,
-                   // text: item.name
-                //}));
-           // });
+            //selecione a div de generos
+            const divGeneros = $('#genre');
+
+            //percorre a lista de generos, criando o botao e add na div
+            dados.forEach(genero => {
+                //crie um botao para cada genero
+                const btn = `<button class="btn btn-outline-light me-2 filter-btn" data-genero="${genero.idGenero}">${genero.descricao}</button>`;
+                //adicione o botao na div de generos
+                divGeneros.append(btn);
+            });
+
+
+            //botao de genero
+            //<button class="btn btn-outline-light me-2 filter-btn" data-genero="todos">Todos</button>
+
+
+            console.log('Deu sucesso!');
+            console.log(dados);
+            console.log(dados[1]);
+            console.log(dados[1].descricao);
         },
 
         //se der erro (400, 500) cai aqui nesse bloco
-        error: function (error) {
+        error: function (erro) {
             console.log('Deu erro!');
         }
     });
-
-
 });

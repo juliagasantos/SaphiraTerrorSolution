@@ -14,6 +14,15 @@ builder.Services.AddDbContext<SaphiraTerrorDbContext>(options => options.UseSqlS
 builder.Services.AddScoped<IFilmeRepository, FilmeRepository>();
 builder.Services.AddScoped<IGeneroRepository, GeneroRepository>();
 
+//configuração do cors
+//
+builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+{
+     builder.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader();
+}));
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -27,6 +36,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//ativar cors
+app.UseCors();
 
 app.UseAuthorization();
 
