@@ -1,7 +1,7 @@
 ﻿@model SaphiraTerror.ViewModels.FilmeViewModel
-// Define que esta View vai receber um objeto do tipo FilmeViewModel.
-// Esse ViewModel contém os dados necessários para criar um filme
-// (título, produtora, imagem, classificação, gênero, etc).
+@* // Define que esta View vai receber um objeto do tipo FilmeViewModel. *@
+@* // Esse ViewModel contém os dados necessários para criar um filme *@
+@* // (título, produtora, imagem, classificação, gênero, etc). *@
 
 @{
     ViewData["Title"] = "Cadastrar Filme";
@@ -9,18 +9,18 @@
 }
 
 <h2>@ViewData["Title"]</h2>
-// Exibe dinamicamente o título da página.
+@* // Exibe dinamicamente o título da página. *@
 
 <form asp-action="Create" enctype="multipart/form-data">
-    // O formulário envia os dados para a Action "Create" do Controller.
-    // "enctype=multipart/form-data" é obrigatório quando há upload de arquivos.
+    @* // O formulário envia os dados para a Action "Create" do Controller. *@
+    @* // "enctype=multipart/form-data" é obrigatório quando há upload de arquivos. *@
 
     <div class="mb-3">
         <label asp-for="TituloFilmeViewModel" class="form-label"></label>
         <input asp-for="TituloFilmeViewModel" class="form-control" />
         <span asp-validation-for="TituloFilmeViewModel" class="text-danger"></span>
-        // "asp-for" conecta o input diretamente à propriedade do ViewModel.
-        // O "span asp-validation-for" exibe mensagens de erro da validação.
+        @* // "asp-for" conecta o input diretamente à propriedade do ViewModel. *@
+        @* // O "span asp-validation-for" exibe mensagens de erro da validação. *@
     </div>
 
     <div class="mb-3">
@@ -32,7 +32,7 @@
     <div class="mb-3">
         <label asp-for="ImagemUpload" class="form-label">Imagem</label>
         <input asp-for="ImagemUpload" type="file" class="form-control" />
-        // Campo de upload para o usuário selecionar a imagem do filme.
+        @* // Campo de upload para o usuário selecionar a imagem do filme. *@
     </div>
 
     <div class="mb-3">
@@ -41,8 +41,8 @@
             <option value="">Selecione</option>
         </select>
         <span asp-validation-for="ClassificacaoIdFilmeViewModel" class="text-danger"></span>
-        // Dropdown (combo) de classificações. O "asp-items" carrega a lista
-        // vinda do ViewModel (IEnumerable<SelectListItem>).
+        @* // Dropdown (combo) de classificações. O "asp-items" carrega a lista *@
+        @* // vinda do ViewModel (IEnumerable<SelectListItem>). *@
     </div>
 
     <div class="mb-3">
@@ -51,19 +51,19 @@
             <option value="">Selecione</option>
         </select>
         <span asp-validation-for="GeneroIdFilmeViewModel" class="text-danger"></span>
-        // Dropdown de gêneros, mesmo funcionamento do anterior.
+        @* // Dropdown de gêneros, mesmo funcionamento do anterior. *@
     </div>
 
     <button type="submit" class="btn btn-primary">Salvar</button>
-    // Botão que envia o formulário.
+    @* // Botão que envia o formulário. *@
 
     <a asp-action="Index" class="btn btn-secondary">Voltar</a>
-    // Link que redireciona para a action "Index" (lista de filmes).
+    @* // Link que redireciona para a action "Index" (lista de filmes). *@
 </form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    // Inclui scripts de validação do ASP.NET (jQuery Validation + Unobtrusive).
-    // Isso permite que os erros definidos com DataAnnotations no Model sejam
-    // exibidos automaticamente no front-end.
+    @* // Inclui scripts de validação do ASP.NET (jQuery Validation + Unobtrusive). *@
+    @* // Isso permite que os erros definidos com DataAnnotations no Model sejam *@
+    @* // exibidos automaticamente no front-end. *@
 }

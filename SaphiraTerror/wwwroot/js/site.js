@@ -47,4 +47,118 @@ $(document).ready(function () {
             console.log('Deu erro!');
         }
     });
+
+
+    $.ajax({
+        url: urlBase + "/Filme", //endpoint
+        type: "GET", //metodo http
+        contentType: "application/json",
+
+        success: function (dados) {
+
+            //selecione a div
+            const divFilmes = $('#filmes-container');
+
+            dados.forEach(filme => {
+
+                corBagde = "success";
+                if (filme.classificacao == "+18") {
+                    corBagde = "danger";
+                } else if (filme.classificacao == "Kids") {
+                    corBagde = "primary";
+                }
+
+                const card = `<div class="col">
+                <div class="card bg-dark border-secondary h-100">
+                    <img src="${filme.urlImagem}" class="card-img-top" alt="${filme.titulo}" style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">${filme.titulo}</h5>
+                        <p class="card-text text-muted">${filme.genero}</p>
+                        <p class="card-text small text-muted">${filme.produtora}</p>
+                        <span class="badge bg-${corBagde}">${filme.classificacao}</span>
+                    </div>
+                </div>
+            </div>`;
+
+                divFilmes.append(card);
+            });
+        },
+        error: function (erro) {
+            console.log('Erro ao carregar filmes!');
+        }
+    });
+
+    
+    //ap clicar em um dos generos (elemento button dentro da div id genre)
+    $(document).on('click', '#genre button', function () {
+        //pegar o valor do atributo 'data-genero' do botão clicado
+        const generoEscolhido = $(this).data('genero');
+        console.log('Gênero: ', generoEscolhido);
+
+        //chamar a função buscarFilmes passando o genero escolhido
+        BuscarFilmes(generoEscolhido);
+
+
+        //filtrar os filmes
+        //if (generoEscolhido === 'todos') {
+        //    //mostrar todos os filmes
+        //    $('.col').show();
+        //} else {
+        //    //esconder todos os filmes
+        //    $('.col').hide();
+        //    //mostrar apenas os filmes do genero clicado
+        //    $(`.col:has(.card-body:contains('${generoEscolhido}'))`).show();
+        //}
+    });
+
+
+   
+    BuscarFilmes("todos");
+    function BuscarFilmes(generoEscolhido) {
+
+        url = "/filme";
+        if (generoEscolhido != 'todos') {
+            url = url + "/" + generoEscolhido;
+        }
+
+        $.ajax({
+            url: urlBase + url,
+            type: "GET",
+            contentType: "application/json",
+
+            success: function(dados) {
+
+                //selecione a div
+                const divFilmes = $('#filmes-container');
+                divFilmes.html("");
+
+                dados.forEach(filme => {
+
+                    corBagde = "success";
+                    if (filme.classificacao == "+18") {
+                        corBagde = "danger";
+                    } else if (filme.classificacao == "Kids") {
+                        corBagde = "primary";
+                    }
+
+                    const card = `<div class="col">
+                <div class="card bg-dark border-secondary h-100">
+                    <img src="${filme.urlImagem}" class="card-img-top" alt="${filme.titulo}" style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">${filme.titulo}</h5>
+                        <p class="card-text text-muted">${filme.genero}</p>
+                        <p class="card-text small text-muted">${filme.produtora}</p>
+                        <span class="badge bg-${corBagde}">${filme.classificacao}</span>
+                    </div>
+                </div>
+            </div>`;
+
+                    divFilmes.append(card);
+                });
+            },
+            error: function(erro) {
+                console.log('Erro ao carregar filmes!');
+            }
+        });
+    }
 });

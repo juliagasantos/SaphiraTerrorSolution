@@ -37,7 +37,7 @@ namespace SaphiraTerror.API.Controllers
             return Ok(resultado);
         }
 
-        [HttpGet(":idGenero")]
+        [HttpGet("{idGenero}")]
         public async Task<ActionResult> Get(int idGenero)
         {
             var filmes = await _filmeRepository.GetByIdGeneroAsync(idGenero);
