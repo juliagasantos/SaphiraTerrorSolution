@@ -1,4 +1,6 @@
+using EmailAPI.Services;
 using Microsoft.EntityFrameworkCore;
+using SaphiraTerror.API.Interfaces;
 using SaphiraTerror.Data;
 using SaphiraTerror.Interfaces;
 using SaphiraTerror.Repositories;
@@ -13,6 +15,9 @@ builder.Services.AddDbContext<SaphiraTerrorDbContext>(options => options.UseSqlS
 // Registro dos REPOSITÓRIOS (injeção de dependência)
 builder.Services.AddScoped<IFilmeRepository, FilmeRepository>();
 builder.Services.AddScoped<IGeneroRepository, GeneroRepository>();
+
+//services
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 //configuração do cors
 //
