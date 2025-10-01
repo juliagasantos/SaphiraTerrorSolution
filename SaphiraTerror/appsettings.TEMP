@@ -1,21 +1,13 @@
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=tcp:srv-saphira.database.windows.net,1433;Initial Catalog=SaphiraTerrorDB;Persist Security Info=False;User ID=mestrasuprema;Password=senha@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-    //"Server=(Localdb)\\mssqllocaldb;DataBase=SaphiraTerrorDB;Trusted_Connection=true;MultipleActiveResultSets=true" 
   },
+
   "Logging": {
     "LogLevel": {
       "Default": "Information",
       "Microsoft.AspNetCore": "Warning"
     }
   },
-  "AllowedHosts": "*",
-  "EmailSettings": {
-    "SmtpHost": "smtp.gmail.com",
-    "SmtpPort": 587,
-    "EmailUser": "juliagasantos90@gmail.com",
-    "EmailPassword": "qufg qunk wvnb ebia",
-    "FromEmail": "juliagasantos90@gmail.com",
-    "FromName": "julinha"
-  }
+  "AllowedHosts": "*"
 }

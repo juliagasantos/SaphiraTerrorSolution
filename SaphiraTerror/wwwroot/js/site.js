@@ -6,7 +6,7 @@
 
 $(document).ready(function () {
     //urlBase da API
-    const urlBase = "http://localhost:5118/api"
+    const urlBase = "https://saphiraterrorapi.azurewebsites.net/api"
 
     
     console.log('Chamando a API');

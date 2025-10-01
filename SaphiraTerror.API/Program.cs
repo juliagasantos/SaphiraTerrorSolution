@@ -1,4 +1,4 @@
-using EmailAPI.Services;
+ï»¿using EmailAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using SaphiraTerror.API.Interfaces;
 using SaphiraTerror.Data;
@@ -8,39 +8,36 @@ using SaphiraTerror.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 //base de dados
 builder.Services.AddDbContext<SaphiraTerrorDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Registro dos REPOSITÓRIOS (injeção de dependência)
+//repositories
 builder.Services.AddScoped<IFilmeRepository, FilmeRepository>();
 builder.Services.AddScoped<IGeneroRepository, GeneroRepository>();
 
 //services
 builder.Services.AddScoped<IEmailService, EmailService>();
 
-//configuração do cors
-//
+//configuraï¿½ï¿½o do CORS
+//nï¿½o esquecer de colocar enbableCors as controllers
 builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
 {
-     builder.AllowAnyOrigin()
+    builder.AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader();
 }));
 
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+app.UseSwagger();
+app.UseSwaggerUI();
+//}
 
 //ativar cors
 app.UseCors();
